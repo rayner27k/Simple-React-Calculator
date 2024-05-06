@@ -12,6 +12,7 @@ class App extends Component {
     };
   }
 
+  // Chamada ao clicar em um botão na calculadora
   handleClick = (value) => {
     let { num1, num2, operador, resultado } = this.state;
   
@@ -69,7 +70,8 @@ class App extends Component {
       }
       return;
     }
-  
+
+      // Verificações para números decimais
     if (value === '.') {
       if (num1 && !operador) {
         this.setState({ num1: num1.includes('.') ? num1 : num1 + '.' });
@@ -82,7 +84,8 @@ class App extends Component {
       }
       return;
     }
-  
+
+    // Limpadores da calculadora
     if (value === 'AC') {
       this.clearAllValues();
       return;
@@ -90,14 +93,16 @@ class App extends Component {
       this.clearValues();
       return;
     }
-  
+
+    // Calcula operação especial
     if (value === '√' || value === 'ᵪ²') {
       if (num1 && !num2) {
         this.calculateSpecialOperation(num1, value);
         return;
       }
     }
-  
+
+    // Lidar com entrada de operadores e números
     if (['+', '-', '×', '÷'].includes(value)) {
       if (num1 && !num2 && operador) {
         this.setState({ operador: value });
@@ -108,14 +113,16 @@ class App extends Component {
       }
       return;
     }
-  
+
+    // Calcula o resultado se '=' é pressionado e todos os campos necessários estão preenchidos
     if (value === '=') {
       if (num1 && operador && num2) {
         this.calculateResult();
       }
       return;
     }
-  
+
+    // Adiciona números aos campos apropriados (num1 ou num2)
     if (!operador) {
       this.setState({ num1: num1 + value });
     } else {
@@ -123,7 +130,7 @@ class App extends Component {
     }
   };
   
-
+  // Função para calcular operações especiais (raiz quadrada, potência quadrada)
   calculateSpecialOperation = (num, operation) => {
     let result = 0;
     num = parseFloat(num);
@@ -137,11 +144,11 @@ class App extends Component {
     // Formatar o resultado para no máximo 5 casas decimais
     result = parseFloat(result.toFixed(5));
   
-    // Mantenha o operador até uma nova entrada ou limpeza.
+    // Mantém o operador até uma nova entrada ou limpeza.
     this.setState({ resultado: result.toString(), num1: result.toString(), operador: operation });
   };
   
-
+  // Função para calcular o resultado das operações básicas
   calculateResult = () => {
     let { num1, num2, operador } = this.state;
     let result = 0;
@@ -167,10 +174,11 @@ class App extends Component {
 
     // Formatar o resultado para no máximo 5 casas decimais
     result = parseFloat(result.toFixed(5));
-
+  
     this.setState({ resultado: result.toString(), num1: result.toString(), operador: '', num2: '' });
   };
 
+  // Função para limpar valores na calculadora
   clearValues = () => {
     let { num1, num2, operador, resultado } = this.state;
     if (resultado) {
@@ -184,10 +192,12 @@ class App extends Component {
     }
   };
 
+  // Função para limpar todos os valores na calculadora
   clearAllValues = () => {
     this.setState({ num1: '', num2: '', operador: '', resultado: '' });
   };
 
+  // Renderização do componente da calculadora
   render() {
     const { num1, num2, resultado, operador } = this.state;
     const displayValue = resultado || num2 || num1 || '0';
